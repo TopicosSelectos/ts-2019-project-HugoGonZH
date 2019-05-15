@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Question 1 @@@@@
+## Question 1
 1.- Create a numeric vector that contains the months of a year. Then, create another vector containing the name for each month. Later, you should assign the months and names. Finally, you should select and display the months related to the summer season  (June, July, August)
 
 ```{r}
@@ -29,8 +29,12 @@ name_months <- c("January",
                  "December")
 name_months
 
-months <- c(num_months, name_months)
+months <- list(number = num_months, name = name_months)
 months
+
+summer_season <- c(months$name[[6]],months$name[[7]],months$name[[8]])
+summer_season
+
 
 ```
 
@@ -89,20 +93,18 @@ HugoGonzalez
 
 ```
 
-## Question 5 @@@@@@@@@@@@@@@@@
+## Question 5 @@
 5.- Load the dataset labeled as ITU_WB.csv that is located in the data folder and storage this dataset in a variable called itu. Then, you should describe the composition of the dataset. This description must contain the number of observations, variables and the type of each variable
+
+The dataframe contains a total of 3735 observations with 12 variables, where some of them have integer numbers like the year, GDP, Life Expectancy Years, GDP per capita income and Fertility Births per woman. Also have factor variables, where contains text/information about the region, code and economy of each region.
 
 ```{r}
 
 itu <- read.csv("data/ITU_WB.csv")
 itu
 
-data.frame(itu)
-class(itu)
-
-
-variable.names(itu)
-typeof(itu)
+str(itu)
+str(itu$Economy)
 
 
 ```
@@ -152,7 +154,7 @@ ggplot(itu_by_year, aes(year, medianValue)) +
 
 ```
 
-## Question 9 @@@@@@@@@@@@@@@
+## Question 9 
 9.- Create a new variable called itu_latin filtering per Region, selecting Latin America & Caribbean and grouping per Income group.
 
 Then, using this dataset, create a plot visualizing the relationship between Internet value and GDP (US$) colored per Income group and faceting per Economy
@@ -163,7 +165,7 @@ itu_latin <- itu %>%
   filter(Region == "Latin America & Caribbean") %>%
   group_by(Income.group)
 
-ggplot(itu_latin, aes(Internet.value, GDP..US..)) +
+ggplot(itu_latin, aes(x = Internet.value, y = GDP..US.., color = Income.group)) +
   geom_point()
 
 itu_latin
@@ -171,13 +173,22 @@ itu_latin
 
 ```
 
-## Question 10 @@@@@@@@@@@@@@@
+## Question 10 @@
 10.- Create a new variable called itu_2017 filtering the year 2017 and removing observations that contain NAs.
 
 Then, using this dataset, create a plot visualizing the relationship between Internet value and GDP (US$), colored per Income group. Furthermore, you should use a log scale in both axes ("x" and "y"). Finally, you should use the facet function in order to wrap by Region.
 
 ```{r}
 
-itu_2017 <-
+itu_2017 <- itu %>%
+  na.omit(itu_2017) %>%
+  filter(year == 2017)
+itu_2017
+
+ggplot(itu_2017, aes(x = Internet.value, y = GDP..US.., color = Income.group)) + 
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
+
 
 ```
